@@ -1,6 +1,8 @@
 package org.example.car_management.service;
 
 
+import org.example.car_management.exception.CarNotFoundException;
+import org.example.car_management.exception.InvalidFuelDataException;
 import org.example.car_management.model.FuelEntry;
 import org.example.car_management.model.FuelStats;
 import org.springframework.stereotype.Service;
@@ -23,16 +25,21 @@ public class FuelService {
 
     public void addFuel(Long carId, double liters, double price, int odometer) {
         if (!carService.carExists(carId)) {
-            throw new IllegalArgumentException("Car not found");
+            throw new CarNotFoundException((carId));
+        }
+
+        if (liters <= 0 || price < 0 || odometer <=0 ) {
+            throw new InvalidFuelDataException("Fuel Data invalid");
         }
 
         fuelEntries.add(new FuelEntry(carId, liters, price, odometer));
+
     }
 
 
     public FuelStats getFuelStats(Long carId) {
         if (!carService.carExists(carId)) {
-            throw new IllegalArgumentException("Car not found");
+            throw new CarNotFoundException(carId);
         }
 
         List<FuelEntry> entriesForCar = fuelEntries.stream()
