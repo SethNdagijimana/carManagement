@@ -35,6 +35,22 @@ public class ApiClient {
         return response.body();
     }
 
+    public String getList() throws Exception{
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/cars"))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() >= 400) {
+            throw new RuntimeException("API error " + response.statusCode() + ": " + response.body());
+        }
+        return response.body();
+    }
+
     public String FuelEntry(Long carId, double liters, double price, int odometer) throws Exception {
         String jsonBody = String.format(
                 "{\"liters\":%d,\"price\":%d,\"odometer\":%d}",
@@ -58,8 +74,6 @@ public class ApiClient {
     }
 
     public String FuelStats(Long carId) throws Exception {
-
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(String.format(BASE_URL + "/cars/%d/fuel/stats", carId)))
                 .header("Content-Type", "application/json")

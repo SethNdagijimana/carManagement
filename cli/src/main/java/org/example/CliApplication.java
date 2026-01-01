@@ -21,6 +21,8 @@ public class CliApplication {
         } else if ("fuel-stats".equals(command)) {
             handleFuelStats(params);
 
+        } else if ("list-cars".equals(command)) {
+            listCars();
         } else {
             System.out.println("Unknown command: " + command);
         }
@@ -52,6 +54,20 @@ public class CliApplication {
         }
     }
 
+    private static void listCars() {
+        try {
+            ApiClient apiClient = new ApiClient();
+            String response = apiClient.getList();
+
+
+            System.out.println("Cars Fetched successfully:");
+            System.out.println(response);
+        } catch (Exception ex) {
+            System.err.println("Failed to fetch cars: " + ex.getMessage());
+        }
+
+    }
+
     private static void handleAddFuel(Map<String, String> params) {
         String carId = params.get("--carId");
         String liter = params.get("--liter");
@@ -77,6 +93,8 @@ public class CliApplication {
         }
 
     }
+
+
 
     private static void handleFuelStats(Map<String, String> params) {
         String carId = params.get("--carId");
