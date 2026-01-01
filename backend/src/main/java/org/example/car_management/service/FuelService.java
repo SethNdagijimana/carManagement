@@ -65,6 +65,6 @@ public class FuelService {
                 ? (totalFuel / distance) * 100
                 : 0;
 
-        return new FuelStats(totalFuel, totalCost, avgConsumption);
+        return new FuelStats(totalFuel, totalCost, avgConsumption) ;
     }
 }
